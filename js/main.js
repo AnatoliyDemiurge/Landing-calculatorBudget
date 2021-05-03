@@ -54,6 +54,7 @@ expensesButton.addEventListener('click',()=>{
         }
     }
     expensesValue.textContent = sum;
+    appData.expensesSum = sum;
 });
 
 optinalExpensesButton.addEventListener('click',()=>{
@@ -66,7 +67,7 @@ optinalExpensesButton.addEventListener('click',()=>{
 
 countDayBudgetButton.addEventListener('click',()=>{
     if (appData.budget != undefined){
-        appData.moneyPerDay = (appData.budget / 30).toFixed();
+        appData.moneyPerDay = ((appData.budget-appData.expensesSum) / 30).toFixed();
         dayBudgetValue.textContent =  appData.moneyPerDay;
         if (appData.moneyPerDay < 100) {
             levelValue.textContent = 'Минимальный уровень достатка';
