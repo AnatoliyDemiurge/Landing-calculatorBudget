@@ -22,15 +22,16 @@ const
     optionalExpensesInput = document.querySelectorAll('.optionalexpenses-item');
     
 var 
-    money,time,inside;
+    money,time,inside,
+    lock = false;
 
 startButton.addEventListener('click',()=>{
+    lock = true;
     money = +prompt('Ваш бюджет на месяц?','');
     time = prompt('Введите дату в формате YYYY-MM-DD','');
     while(isNaN(money) || money == "" || money == null){
         money = +prompt('Ваш бюджет на месяц?','');
     }
-
     appData.budget = money;
     appData.timeData = time;
     budgetValue.textContent = money.toFixed();
@@ -41,44 +42,50 @@ startButton.addEventListener('click',()=>{
 });
 
 expensesButton.addEventListener('click',()=>{
-    let sum = 0;
-    for (let i = 0; i < expensesInput.length; i++) {    
-        let a = expensesInput[i].value;
-            b = expensesInput[++i].value;
-        if ((typeof(a)) === 'string' && (typeof(a)) != null && (typeof(b)) != null && a != '' && b != ''){
-            appData.expenses[a] = b;
-            sum += +b;
-        } else {
-            i--;
+    if (lock == true) {
+        let sum = 0;
+        for (let i = 0; i < expensesInput.length; i++) {    
+            let a = expensesInput[i].value;
+                b = expensesInput[++i].value;
+            if ((typeof(a)) === 'string' && (typeof(a)) != null && (typeof(b)) != null && a != '' && b != ''){
+                appData.expenses[a] = b;
+                sum += +b;
+            } else {
+                i--;
+            }
         }
+        appData.expenses[inside] = sum;
+        expensesValue.textContent = sum;
     }
-    appData.expenses[inside] = sum;
-    expensesValue.textContent = sum;
 });
 
 optinalExpensesButton.addEventListener('click',()=>{
-    for (let i = 0; i < optionalExpensesInput.length; i++) {    
-        exp = optionalExpensesInput[i].value;
-        appData.optionalExpenses[i] = exp;
-        optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' '; 
-    }
+   if (lock == true) {
+        for (let i = 0; i < optionalExpensesInput.length; i++) {    
+            exp = optionalExpensesInput[i].value;
+            appData.optionalExpenses[i] = exp;
+            optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' '; 
+        }
+   }
 });
 
 countDayBudgetButton.addEventListener('click',()=>{
-    if (appData.budget != undefined){
-        appData.moneyPerDay = ((appData.budget-appData.expenses[inside]) / 30).toFixed();
-        dayBudgetValue.textContent =  appData.moneyPerDay;
-        if (appData.moneyPerDay < 100) {
-            levelValue.textContent = 'Минимальный уровень достатка';
-        }else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-            levelValue.textContent = 'Средний уровень достатка';
-        }else if (appData.moneyPerDay > 2000) {
-            levelValue.textContent = 'Высокий уровень достатка';
-        }else {
-            levelValue.textContent = 'Произошла mistake';
-        }   
-    }else{
-        dayBudgetValue.textContent = 'Произошла mistake';
+    if (lock == true) {
+        if (appData.budget != undefined){
+            appData.moneyPerDay = ((appData.budget-appData.expenses[inside]) / 30).toFixed();
+            dayBudgetValue.textContent =  appData.moneyPerDay;
+            if (appData.moneyPerDay < 100) {
+                levelValue.textContent = 'Минимальный уровень достатка';
+            }else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
+                levelValue.textContent = 'Средний уровень достатка';
+            }else if (appData.moneyPerDay > 2000) {
+                levelValue.textContent = 'Высокий уровень достатка';
+            }else {
+                levelValue.textContent = 'Произошла mistake';
+            }   
+        }else{
+            dayBudgetValue.textContent = 'Произошла mistake';
+        }
     }
 });
 
@@ -89,10 +96,12 @@ chooseIncomeInput.addEventListener('change',()=>{
 });
 
 checkSavingsRadio.addEventListener('click',()=>{
-    if (appData.savings == true) {
-        appData.savings = false;
-    } else {
-        appData.savings = true;
+    if (lock == true) {
+        if (appData.savings == true) {
+            appData.savings = false;
+        } else {
+            appData.savings = true;
+        }
     }
 });
 
