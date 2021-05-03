@@ -22,7 +22,7 @@ const
     optionalExpensesInput = document.querySelectorAll('.optionalexpenses-item');
     
 var 
-    money,time;
+    money,time,inside;
 
 startButton.addEventListener('click',()=>{
     money = +prompt('Ваш бюджет на месяц?','');
@@ -45,7 +45,6 @@ expensesButton.addEventListener('click',()=>{
     for (let i = 0; i < expensesInput.length; i++) {    
         let a = expensesInput[i].value;
             b = expensesInput[++i].value;
-    
         if ((typeof(a)) === 'string' && (typeof(a)) != null && (typeof(b)) != null && a != '' && b != ''){
             appData.expenses[a] = b;
             sum += +b;
@@ -53,8 +52,8 @@ expensesButton.addEventListener('click',()=>{
             i--;
         }
     }
+    appData.expenses[inside] = sum;
     expensesValue.textContent = sum;
-    appData.expensesSum = sum;
 });
 
 optinalExpensesButton.addEventListener('click',()=>{
@@ -67,7 +66,7 @@ optinalExpensesButton.addEventListener('click',()=>{
 
 countDayBudgetButton.addEventListener('click',()=>{
     if (appData.budget != undefined){
-        appData.moneyPerDay = ((appData.budget-appData.expensesSum) / 30).toFixed();
+        appData.moneyPerDay = ((appData.budget-appData.expenses[inside]) / 30).toFixed();
         dayBudgetValue.textContent =  appData.moneyPerDay;
         if (appData.moneyPerDay < 100) {
             levelValue.textContent = 'Минимальный уровень достатка';
